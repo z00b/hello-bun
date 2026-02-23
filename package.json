@@ -1,0 +1,11 @@
+{
+  "name": "hellbun",
+  "version": "1.0.0",
+  "type": "module",
+  "bin": {
+    "hellbun": "./src/index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
+}
