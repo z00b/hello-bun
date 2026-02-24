@@ -54,10 +54,6 @@ jobs:
           command: |
             source ~/.bunenv
             goreleaser release --clean
-          environment:
-            GITHUB_TOKEN: ${GITHUB_TOKEN}
-            # Optional: Add this if you want Homebrew tap publishing
-            # HOMEBREW_TAP_GITHUB_TOKEN: ${HOMEBREW_TAP_TOKEN}
 
 workflows:
   version: 2
