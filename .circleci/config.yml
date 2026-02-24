@@ -38,6 +38,15 @@ jobs:
             bun install
 
       - run:
+          name: Install Nix
+          command: |
+            # Install Nix package manager (for nix-prefetch-url)
+            sh <(curl -L https://nixos.org/nix/install) --no-daemon
+            echo 'source ~/.nix-profile/etc/profile.d/nix.sh' >> ~/.nixenv
+            source ~/.nixenv
+            nix --version
+
+      - run:
           name: Install GoReleaser
           command: |
             # Download and install GoReleaser
@@ -53,6 +62,7 @@ jobs:
           name: Run GoReleaser
           command: |
             source ~/.bunenv
+            source ~/.nixenv
             goreleaser release --clean
 
 workflows:

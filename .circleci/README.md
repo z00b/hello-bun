@@ -21,8 +21,9 @@ The CircleCI workflow triggers only when a version tag (matching `v*`) is pushed
 1. **Checkout**: Fetches the repository code and all Git tags
 2. **Install Bun**: Downloads and installs the latest Bun runtime
 3. **Install Dependencies**: Runs `bun install` to get project dependencies
-4. **Install GoReleaser**: Downloads GoReleaser v2.6.1
-5. **Run GoReleaser**: Executes the release process which:
+4. **Install Nix**: Installs Nix package manager (needed for `nix-prefetch-url` to generate Nix package hashes)
+5. **Install GoReleaser**: Downloads GoReleaser v2.6.1
+6. **Run GoReleaser**: Executes the release process which:
    - Builds binaries for all platforms
    - Creates archives and checksums
    - Generates Homebrew formula
@@ -144,7 +145,10 @@ The workflow uses `cimg/base:stable` which is CircleCI's base Ubuntu image. This
 - Git
 - curl/wget
 
-We install Bun and GoReleaser during the workflow.
+We install the following tools during the workflow:
+- **Bun**: JavaScript runtime for building the application
+- **Nix**: Package manager (provides `nix-prefetch-url` for generating Nix package hashes)
+- **GoReleaser**: Release automation tool
 
 ## Resource Class
 
@@ -163,6 +167,16 @@ This is sufficient for building the Bun binaries. Adjust if needed for larger pr
 ### Bun installation fails
 - Check CircleCI's network connectivity
 - Verify the Bun install script URL is still valid
+
+### Nix installation fails
+- Nix installation may take a few minutes (it's normal)
+- Check if the Nix install script URL is accessible
+- Verify CircleCI has sufficient disk space
+
+### "nix-prefetch-url is not available" error
+- This means Nix wasn't installed properly or isn't in PATH
+- The workflow now installs Nix before running GoReleaser
+- Verify the `~/.nixenv` file is being sourced correctly
 
 ### GoReleaser fails
 - Ensure your `.goreleaser.yaml` is valid: `goreleaser check`
