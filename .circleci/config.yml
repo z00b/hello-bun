@@ -45,6 +45,11 @@ jobs:
             goreleaser --version
 
       - run:
+          name: Check token
+          command: |
+            if [ -z "${GITHUB_TOKEN}" ]; then echo "TOKEN IS MISSING"; else echo "Token starts with: ${GITHUB_TOKEN:0:4}"; fi
+
+      - run:
           name: Run GoReleaser
           command: |
             source ~/.bunenv
