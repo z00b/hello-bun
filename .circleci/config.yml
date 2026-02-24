@@ -42,8 +42,7 @@ jobs:
           command: |
             # Install Nix package manager (for nix-prefetch-url)
             sh <(curl -L https://nixos.org/nix/install) --no-daemon
-            echo 'source ~/.nix-profile/etc/profile.d/nix.sh' >> ~/.nixenv
-            source ~/.nixenv
+            source ~/.nix-profile/etc/profile.d/nix.sh
             nix --version
 
       - run:
@@ -62,7 +61,7 @@ jobs:
           name: Run GoReleaser
           command: |
             source ~/.bunenv
-            source ~/.nixenv
+            source ~/.nix-profile/etc/profile.d/nix.sh
             goreleaser release --clean
 
 workflows:
