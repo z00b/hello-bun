@@ -50,12 +50,18 @@ Test the release configuration locally:
 goreleaser release --snapshot --clean
 ```
 
-Create a release (requires a Git tag):
+Create a release using the helper script:
+
+```bash
+source release.sh
+release 1.0.0 "First stable release"
+```
+
+Or manually create a release:
 
 ```bash
 git tag -a v1.0.0 -m "First release"
-git push origin v1.0.0
-goreleaser release --clean
+git push origin main --tags
 ```
 
 ## License
