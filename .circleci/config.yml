@@ -58,7 +58,6 @@ jobs:
           name: Run GoReleaser
           command: |
             source ~/.bunenv
-            source ~/.nix-profile/etc/profile.d/nix.sh
             goreleaser release --clean
 
 workflows:
