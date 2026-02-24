@@ -127,10 +127,12 @@ The project is configured to use CircleCI for automated releases (`.circleci/con
    - Click "Set Up Project" for your repository
    - CircleCI will automatically detect the `.circleci/config.yml`
 
-2. **Add environment variables in CircleCI:**
-   - Go to Project Settings → Environment Variables
+2. **Set up the `z00b-releaser` context in CircleCI:**
+   - Go to Organization Settings → Contexts
+   - Create or use the existing `z00b-releaser` context
    - Add `GITHUB_TOKEN` with a GitHub Personal Access Token (needs `repo` scope)
    - Optional: Add `HOMEBREW_TAP_TOKEN` if publishing to Homebrew tap
+   - See `.circleci/README.md` for detailed instructions
 
 3. **Enable tag builds:**
    - By default, CircleCI only builds branches
@@ -138,9 +140,11 @@ The project is configured to use CircleCI for automated releases (`.circleci/con
 
 #### GitHub Personal Access Token:
 
-Create a token at https://github.com/settings/tokens with these permissions:
-- `repo` (Full control of private repositories)
-- `write:packages` (if publishing to GitHub Packages)
+**See [GITHUB_TOKEN_PERMISSIONS.md](GITHUB_TOKEN_PERMISSIONS.md) for detailed permission requirements.**
+
+Quick summary:
+- **Fine-grained token (Recommended)**: Contents (Read and write) for all three repos
+- **Classic token**: `repo` scope
 
 #### Testing the workflow:
 

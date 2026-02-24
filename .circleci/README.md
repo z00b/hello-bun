@@ -6,6 +6,14 @@ This directory contains the CircleCI configuration for automated releases of hel
 
 - `config.yml` - Main CircleCI pipeline configuration
 
+## Context Usage
+
+The workflow uses the **`z00b-releaser`** context, which provides:
+- Centralized management of release credentials
+- Reusable across multiple projects in the `z00b` organization
+- Security group restrictions (optional)
+- Easy token rotation without updating individual projects
+
 ## How it Works
 
 The CircleCI workflow triggers only when a version tag (matching `v*`) is pushed to the repository:
@@ -32,26 +40,80 @@ The CircleCI workflow triggers only when a version tag (matching `v*`) is pushed
 4. Find your repository and click "Set Up Project"
 5. CircleCI will detect the `.circleci/config.yml` automatically
 
-### 2. Add Environment Variables
+### 2. Set Up Context with Environment Variables
 
-Go to Project Settings → Environment Variables and add:
+This project uses the **`z00b-releaser`** context to manage environment variables across multiple projects.
+
+#### Create the Context:
+
+1. Go to https://app.circleci.com/
+2. Click "Organization Settings" (in the sidebar)
+3. Click "Contexts"
+4. Click "Create Context"
+5. Name it: `z00b-releaser`
+6. Click "Create Context"
+
+#### Add Environment Variables to Context:
+
+1. Click on the `z00b-releaser` context
+2. Click "Add Environment Variable"
+3. Add the following variables:
 
 | Variable | Description | Required |
 |----------|-------------|----------|
 | `GITHUB_TOKEN` | GitHub Personal Access Token with `repo` scope | Yes |
 | `HOMEBREW_TAP_TOKEN` | Token for updating Homebrew tap (can be same as GITHUB_TOKEN) | Optional |
 
+#### Context Security:
+
+Contexts can be restricted to specific security groups. To add restrictions:
+1. In the context page, click "Add Security Group"
+2. Choose which teams/groups can use this context
+3. This prevents unauthorized projects from accessing your tokens
+
 #### Creating a GitHub Token
 
-1. Go to https://github.com/settings/tokens
-2. Click "Generate new token (classic)"
+**See [GITHUB_TOKEN_PERMISSIONS.md](../GITHUB_TOKEN_PERMISSIONS.md) for detailed permission requirements.**
+
+Quick guide:
+
+1. Go to https://github.com/settings/tokens?type=beta (Fine-grained) or https://github.com/settings/tokens (Classic)
+2. Click "Generate new token"
 3. Give it a descriptive name (e.g., "hellbun-circleci")
-4. Select scopes:
-   - ✅ `repo` (Full control of private repositories)
-   - ✅ `write:packages` (optional, for GitHub Packages)
-5. Click "Generate token"
-6. Copy the token immediately (you won't see it again!)
-7. Add it to CircleCI as `GITHUB_TOKEN`
+4. **Fine-grained token (Recommended):**
+   - Repository access: Select `hello-bun`, `homebrew-tap`, `nur-packages`
+   - Permissions: Contents → Read and write
+5. **Classic token:**
+   - Scopes: `repo` (Full control)
+6. Click "Generate token"
+7. Copy the token immediately (you won't see it again!)
+8. Add it to CircleCI context as `GITHUB_TOKEN`
+
+#### Alternative: Using CircleCI CLI
+
+You can also manage contexts via the CircleCI CLI:
+
+```bash
+# Install CircleCI CLI first:
+# https://circleci.com/docs/local-cli/
+
+# Create context (if not exists)
+circleci context create github z00b-releaser
+
+# Add environment variables to context
+circleci context store-secret github z00b-releaser GITHUB_TOKEN
+# Enter token when prompted
+
+# Optional: Add Homebrew tap token
+circleci context store-secret github z00b-releaser HOMEBREW_TAP_TOKEN
+# Enter token when prompted
+
+# List contexts
+circleci context list github z00b
+
+# List environment variables in context
+circleci context show github z00b z00b-releaser
+```
 
 ### 3. Trigger a Release
 

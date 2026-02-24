@@ -63,6 +63,7 @@ workflows:
   release:
     jobs:
       - release:
+          context: z00b-releaser
           # Only run on tag pushes
           filters:
             tags:
