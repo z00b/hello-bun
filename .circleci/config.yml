@@ -42,17 +42,14 @@ jobs:
 
       - flox/install
 
+      - run: rm -f flox.*.deb
+
       - run:
           name: Install GoReleaser
           command: |
             # Download and install GoReleaser
             curl -sL https://github.com/goreleaser/goreleaser/releases/download/v2.6.1/goreleaser_Linux_x86_64.tar.gz | sudo tar -xz -C /usr/local/bin goreleaser
             goreleaser --version
-
-      - run:
-          name: Check token
-          command: |
-            if [ -z "${GITHUB_TOKEN}" ]; then echo "TOKEN IS MISSING"; else echo "Token starts with: ${GITHUB_TOKEN: -4}"; fi
 
       - run:
           name: Run GoReleaser
