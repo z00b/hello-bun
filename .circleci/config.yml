@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  flox: flox/flox-orb@1.0.0
+
 jobs:
   release:
     docker:
@@ -37,13 +40,7 @@ jobs:
             source ~/.bunenv
             bun install
 
-      - run:
-          name: Install Nix
-          command: |
-            # Install Nix package manager (for nix-prefetch-url)
-            sh <(curl -L https://nixos.org/nix/install) --no-daemon
-            source ~/.nix-profile/etc/profile.d/nix.sh
-            nix --version
+      - flox/install
 
       - run:
           name: Install GoReleaser
