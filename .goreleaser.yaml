@@ -1,0 +1,105 @@
+# GoReleaser configuration for hellbun
+# Documentation: https://goreleaser.com
+
+version: 2
+
+before:
+  hooks:
+    # Ensure dependencies are installed
+    - bun install
+
+builds:
+  - id: hellbun
+    builder: bun
+    binary: hellbun
+    main: ./src/index.ts
+
+    # Targets for cross-platform builds
+    # Format: os-arch[-variant]
+    targets:
+      - linux-x64-modern
+      - linux-arm64
+      - darwin-x64
+      - darwin-arm64
+      - windows-x64-modern
+
+    # Additional flags for bun build --compile
+    flags:
+      - --compile
+
+    # Environment variables for the build
+    env:
+      - CGO_ENABLED=0
+
+archives:
+  - id: default
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+    builds_info:
+      group: root
+      owner: root
+    files:
+      - LICENSE
+      - README.md
+
+checksum:
+  name_template: 'checksums.txt'
+
+snapshot:
+  version_template: "{{ incpatch .Version }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^ci:'
+      - Merge pull request
+      - Merge branch
+
+# Homebrew formula
+brews:
+  - name: hellbun
+    repository:
+      owner: z00b
+      name: homebrew-tap
+      # You'll need to create a GitHub repo called "homebrew-tap"
+      # and give GoReleaser a token with repo write permissions
+    directory: Formula
+    homepage: https://github.com/z00b/hello-bun
+    description: "A simple Hello, Bun! application"
+    license: "Apache-2.0"
+    test: |
+      system "#{bin}/hellbun"
+    install: |
+      bin.install "hellbun"
+
+# Nix package (for NUR - Nix User Repository)
+nix:
+  - name: hellbun
+    repository:
+      owner: z00b
+      name: nur-packages
+      # You'll need to create a NUR repository
+      # See: https://github.com/nix-community/NUR
+    homepage: https://github.com/z00b/hello-bun
+    description: "A simple Hello, Bun! application"
+    license: "asl20"
+    path: pkgs/hellbun/default.nix
+    install: |
+      mkdir -p $out/bin
+      cp hellbun $out/bin/
+
+# Metadata for the release
+release:
+  github:
+    owner: z00b
+    name: hello-bun
+  draft: false
+  prerelease: auto

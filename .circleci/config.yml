@@ -1,0 +1,71 @@
+version: 2.1
+
+# Orbs are reusable packages of CircleCI configuration
+orbs:
+  node: circleci/node@5.2.0
+
+jobs:
+  release:
+    docker:
+      # Use an image with both Bun and GoReleaser
+      - image: cimg/base:stable
+
+    resource_class: medium
+
+    steps:
+      - checkout
+
+      - run:
+          name: Fetch all tags
+          command: |
+            git fetch --force --tags
+            git fetch --force --prune --tags
+
+      - run:
+          name: Install Bun
+          command: |
+            curl -fsSL https://bun.sh/install | bash
+            echo 'export BUN_INSTALL="$HOME/.bun"' >> $BASH_ENV
+            echo 'export PATH="$BUN_INSTALL/bin:$PATH"' >> $BASH_ENV
+            source $BASH_ENV
+
+      - run:
+          name: Verify Bun installation
+          command: |
+            source $BASH_ENV
+            bun --version
+
+      - run:
+          name: Install dependencies
+          command: |
+            source $BASH_ENV
+            bun install
+
+      - run:
+          name: Install GoReleaser
+          command: |
+            # Download and install GoReleaser
+            curl -sL https://github.com/goreleaser/goreleaser/releases/download/v2.6.1/goreleaser_Linux_x86_64.tar.gz | sudo tar -xz -C /usr/local/bin goreleaser
+            goreleaser --version
+
+      - run:
+          name: Run GoReleaser
+          command: |
+            source $BASH_ENV
+            goreleaser release --clean
+          environment:
+            GITHUB_TOKEN: ${GITHUB_TOKEN}
+            # Optional: Add this if you want Homebrew tap publishing
+            # HOMEBREW_TAP_GITHUB_TOKEN: ${HOMEBREW_TAP_TOKEN}
+
+workflows:
+  version: 2
+  release:
+    jobs:
+      - release:
+          # Only run on tag pushes
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/

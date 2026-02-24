@@ -1,0 +1,10 @@
+# GoReleaser build artifacts
+dist/
+
+# Bun
+node_modules/
+*.lock
+
+# OS
+.DS_Store
+Thumbs.db
