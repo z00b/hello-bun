@@ -46,14 +46,6 @@ release() {
   echo "  Branch: main"
   echo ""
 
-  # Confirm
-  read -p "Continue with release? (y/N) " -n 1 -r
-  echo
-  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    echo "Release cancelled"
-    return 1
-  fi
-
   # Perform release steps
   echo ""
   echo "Step 1/4: Adding files..."
@@ -68,7 +60,7 @@ release() {
   git tag -a "$tag" -m "$message" || { echo "Error: git tag failed"; return 1; }
 
   echo "Step 4/4: Pushing to origin main with tags..."
-  git push origin main $tag || { echo "Error: git push failed"; return 1; }
+  git push origin $tag || { echo "Error: git push failed"; return 1; }
 
   echo ""
   echo "✅ Release $tag completed successfully!"
