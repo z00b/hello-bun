@@ -64,7 +64,7 @@ jobs:
             VERSION=${CIRCLE_TAG#v}
 
             # Clone NUR packages repository
-            git clone https://github.com/z00b/nur-packages.git /tmp/nur-packages
+            git clone git@github.com:z00b/nur-packages.git /tmp/nur-packages
             cd /tmp/nur-packages
 
             # Configure git
