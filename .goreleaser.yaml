@@ -83,12 +83,15 @@ brews:
 # Nix package (for NUR - Nix User Repository)
 nix:
   - name: hellbun
+    repository:
+      owner: z00b
+      name: nur-packages
     # Skip pushing to repository - generate locally only
     # The nix package will be in dist/nix/ after build
     skip_upload: true
     homepage: https://github.com/z00b/hello-bun
     description: "A simple Hello, Bun! application"
-    license: "MIT"
+    license: "mit"
     path: pkgs/hellbun/default.nix
     install: |
       mkdir -p $out/bin
