@@ -21,15 +21,16 @@ The CircleCI workflow triggers only when a version tag (matching `v*`) is pushed
 1. **Checkout**: Fetches the repository code and all Git tags
 2. **Install Bun**: Downloads and installs the latest Bun runtime
 3. **Install Dependencies**: Runs `bun install` to get project dependencies
-4. **Install Nix**: Installs Nix package manager (needed for `nix-prefetch-url` to generate Nix package hashes)
+4. **Install Flox**: Installs Flox (provides Nix tools)
 5. **Install GoReleaser**: Downloads GoReleaser v2.6.1
 6. **Run GoReleaser**: Executes the release process which:
    - Builds binaries for all platforms
    - Creates archives and checksums
    - Generates Homebrew formula
-   - Generates Nix package
+   - Generates Nix package locally
    - Creates GitHub release
-   - Publishes to distribution channels
+   - Publishes Homebrew formula to tap
+7. **Publish Nix Package**: Automatically pushes the generated Nix package to your NUR repository
 
 ## Setup Instructions
 

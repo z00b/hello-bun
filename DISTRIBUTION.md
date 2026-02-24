@@ -34,6 +34,16 @@ brew install hellbun
 
 ## Nix User Repository (NUR)
 
+### Automated Publishing
+
+The CircleCI workflow automatically publishes to your NUR repository:
+1. GoReleaser generates the Nix package with proper hashes
+2. A separate step clones your `nur-packages` repository
+3. Copies the generated package to the correct location
+4. Commits and pushes to the NUR repository
+
+This approach avoids `nix-prefetch-url` timing issues while still fully automating the release process.
+
 ### Prerequisites
 
 1. Fork the NUR repository: https://github.com/nix-community/NUR
@@ -163,11 +173,12 @@ git push origin v1.0.0
 
 ## Updating Releases
 
-When you push a new tag, GoReleaser will automatically:
+When you push a new tag, CircleCI will automatically:
 1. Build binaries for all platforms
 2. Create a GitHub release
 3. Update the Homebrew formula in your tap
-4. Update the Nix package in your NUR repository
+4. Generate the Nix package with proper hashes
+5. Push the Nix package to your NUR repository
 
 ```bash
 git tag -a v1.0.1 -m "Release v1.0.1"

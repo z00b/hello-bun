@@ -57,6 +57,29 @@ jobs:
             source ~/.bunenv
             goreleaser release --clean
 
+      - run:
+          name: Publish Nix package to NUR
+          command: |
+            # Extract version from tag
+            VERSION=${CIRCLE_TAG#v}
+
+            # Clone NUR packages repository
+            git clone https://github.com/z00b/nur-packages.git /tmp/nur-packages
+            cd /tmp/nur-packages
+
+            # Configure git
+            git config user.name "z00b Bot"
+            git config user.email "rob@zuber.net"
+
+            # Copy generated Nix package
+            mkdir -p pkgs/hellbun
+            cp ~/project/dist/nix/pkgs/hellbun/default.nix pkgs/hellbun/
+
+            # Commit and push
+            git add pkgs/hellbun/default.nix
+            git commit -m "Update hellbun to ${CIRCLE_TAG}" || echo "No changes to commit"
+            git push https://${GITHUB_TOKEN}@github.com/z00b/nur-packages.git main
+
 workflows:
   version: 2
   release:

@@ -74,7 +74,7 @@ brews:
     directory: Formula
     homepage: https://github.com/z00b/hello-bun
     description: "A simple Hello, Bun! application"
-    license: "Apache-2.0"
+    license: "MIT"
     test: |
       system "#{bin}/hellbun"
     install: |
@@ -83,14 +83,12 @@ brews:
 # Nix package (for NUR - Nix User Repository)
 nix:
   - name: hellbun
-    repository:
-      owner: z00b
-      name: nur-packages
-      # You'll need to create a NUR repository
-      # See: https://github.com/nix-community/NUR
+    # Skip pushing to repository - generate locally only
+    # The nix package will be in dist/nix/ after build
+    skip_upload: true
     homepage: https://github.com/z00b/hello-bun
     description: "A simple Hello, Bun! application"
-    license: "asl20"
+    license: "MIT"
     path: pkgs/hellbun/default.nix
     install: |
       mkdir -p $out/bin
