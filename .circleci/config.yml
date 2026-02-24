@@ -1,9 +1,5 @@
 version: 2.1
 
-# Orbs are reusable packages of CircleCI configuration
-orbs:
-  node: circleci/node@5.2.0
-
 jobs:
   release:
     docker:
@@ -25,20 +21,20 @@ jobs:
           name: Install Bun
           command: |
             curl -fsSL https://bun.sh/install | bash
-            echo 'export BUN_INSTALL="$HOME/.bun"' >> $BASH_ENV
-            echo 'export PATH="$BUN_INSTALL/bin:$PATH"' >> $BASH_ENV
-            source $BASH_ENV
+            echo 'export BUN_INSTALL="$HOME/.bun"' > ~/.bunenv
+            echo 'export PATH="$BUN_INSTALL/bin:$PATH"' >> ~/.bunenv
+            source ~/.bunenv
 
       - run:
           name: Verify Bun installation
           command: |
-            source $BASH_ENV
+            source ~/.bunenv
             bun --version
 
       - run:
           name: Install dependencies
           command: |
-            source $BASH_ENV
+            source ~/.bunenv
             bun install
 
       - run:
@@ -51,7 +47,7 @@ jobs:
       - run:
           name: Run GoReleaser
           command: |
-            source $BASH_ENV
+            source ~/.bunenv
             goreleaser release --clean
           environment:
             GITHUB_TOKEN: ${GITHUB_TOKEN}
