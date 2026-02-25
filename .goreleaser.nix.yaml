@@ -1,0 +1,37 @@
+# GoReleaser configuration for Nix package generation
+# This runs AFTER the main release to allow GitHub release assets to be available
+# Documentation: https://goreleaser.com
+
+version: 2
+
+# Skip all build steps - we're only generating the Nix package
+builds:
+  - skip: true
+
+# Point to existing archives from the main release
+dist: dist
+
+# Nix package (for NUR - Nix User Repository)
+nix:
+  - name: hellbun
+    repository:
+      owner: z00b
+      name: nur-packages
+    homepage: https://github.com/z00b/hello-bun
+    description: "A simple Hello, Bun! application"
+    license: "mit"
+    path: pkgs/hellbun/default.nix
+    install: |
+      mkdir -p $out/bin
+      cp hellbun $out/bin/
+
+# Use the existing release - don't create a new one
+release:
+  disable: true
+
+# Disable other publishers
+announce:
+  skip: true
+
+changelog:
+  disable: true

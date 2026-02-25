@@ -34,16 +34,24 @@ brew install hellbun
 
 ## Nix User Repository (NUR)
 
-### Automated Publishing
+### Automated Publishing (Two-Pass Approach)
 
-The CircleCI workflow automatically publishes to your NUR repository:
-1. GoReleaser generates the Nix package with proper hashes
-2. A separate step clones your `nur-packages` repository
-3. Copies the generated package to the correct location
-4. Adds a `flake.nix` file for Nix Flakes support (if not already present)
-5. Commits and pushes to the NUR repository
+The CircleCI workflow uses a two-pass GoReleaser approach to ensure correct hashes:
 
-This approach avoids `nix-prefetch-url` timing issues while still fully automating the release process.
+**Pass 1** (`.goreleaser.yaml`):
+1. Builds binaries and creates archives
+2. Creates GitHub release and uploads all assets
+3. Publishes Homebrew formula
+
+**15-second wait** - Allows GitHub to process the release
+
+**Pass 2** (`.goreleaser.nix.yaml`):
+1. Fetches release assets from GitHub URLs
+2. Calculates proper SHA256 hashes using `nix-prefetch-url`
+3. Generates Nix package with correct hashes
+4. Automatically pushes to NUR repository
+
+This two-pass approach solves the all-zeros hash problem by generating the Nix package AFTER the GitHub release assets are available.
 
 ### Nix Flakes Support
 
