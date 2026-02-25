@@ -61,6 +61,8 @@ jobs:
           name: Wait for GitHub to process release
           command: sleep 15
 
+      - run: git status
+
       - run:
           name: Generate and publish Nix package
           command: |
