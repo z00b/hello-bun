@@ -15,10 +15,6 @@ dist: dist
 before:
   hooks: []
 
-# Work in partial mode - don't require all artifacts
-partial:
-  by: target
-
 # Nix package (for NUR - Nix User Repository)
 nix:
   - name: hellbun
