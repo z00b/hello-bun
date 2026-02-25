@@ -66,9 +66,9 @@ jobs:
           command: |
             source ~/.bunenv
             # Run GoReleaser again with Nix-only config
-            # Skip validation since dist/ already exists from first pass
+            # Skip validation and before hooks since dist/ already exists from first pass
             # This can now fetch from GitHub URLs to calculate proper hashes
-            goreleaser release --config .goreleaser.nix.yaml --skip=validate
+            goreleaser release --config .goreleaser.nix.yaml --skip=validate --skip=before
 
       # - run:
       #     name: Add flake.nix to NUR

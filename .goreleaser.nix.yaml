@@ -11,6 +11,14 @@ builds:
 # Point to existing archives from the main release
 dist: dist
 
+# Disable before hooks to avoid checking for clean dist
+before:
+  hooks: []
+
+# Work in partial mode - don't require all artifacts
+partial:
+  by: target
+
 # Nix package (for NUR - Nix User Repository)
 nix:
   - name: hellbun
