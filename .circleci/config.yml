@@ -59,17 +59,16 @@ jobs:
 
       - run:
           name: Wait for GitHub to process release
-          command: sleep 15
-
-      - run: git status
+          command: sleep 10
 
       - run:
           name: Generate and publish Nix package
           command: |
             source ~/.bunenv
             # Run GoReleaser again with Nix-only config
+            # Skip validation since dist/ already exists from first pass
             # This can now fetch from GitHub URLs to calculate proper hashes
-            goreleaser release --clean --config .goreleaser.nix.yaml
+            goreleaser release --config .goreleaser.nix.yaml --skip=validate
 
       # - run:
       #     name: Add flake.nix to NUR
