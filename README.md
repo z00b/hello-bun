@@ -15,8 +15,18 @@ brew install hellbun
 
 ### Nix/NixOS
 
+**Traditional Nix:**
 ```bash
 nix-env -iA nur.repos.z00b.hellbun
+```
+
+**Nix Flakes:**
+```bash
+# Run directly
+nix run github:z00b/nur-packages#hellbun
+
+# Install to profile
+nix profile install github:z00b/nur-packages#hellbun
 ```
 
 ### Direct Download

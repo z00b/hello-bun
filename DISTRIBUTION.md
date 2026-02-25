@@ -40,9 +40,29 @@ The CircleCI workflow automatically publishes to your NUR repository:
 1. GoReleaser generates the Nix package with proper hashes
 2. A separate step clones your `nur-packages` repository
 3. Copies the generated package to the correct location
-4. Commits and pushes to the NUR repository
+4. Adds a `flake.nix` file for Nix Flakes support (if not already present)
+5. Commits and pushes to the NUR repository
 
 This approach avoids `nix-prefetch-url` timing issues while still fully automating the release process.
+
+### Nix Flakes Support
+
+The repository includes a `flake.nix` that will be published to your NUR repository, enabling users to install via:
+
+```bash
+# Run directly
+nix run github:z00b/nur-packages#hellbun
+
+# Install to profile
+nix profile install github:z00b/nur-packages#hellbun
+
+# In a flake.nix
+{
+  inputs.z00b.url = "github:z00b/nur-packages";
+  # ...
+  packages = [ z00b.packages.${system}.hellbun ];
+}
+```
 
 ### Prerequisites
 

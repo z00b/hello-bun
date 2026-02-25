@@ -75,8 +75,13 @@ jobs:
             mkdir -p pkgs/hellbun
             cp ~/project/dist/nix/pkgs/hellbun/default.nix pkgs/hellbun/
 
+            # Copy flake.nix if it doesn't exist or update it
+            if [ ! -f flake.nix ]; then
+              cp ~/project/flake.nix .
+            fi
+
             # Commit and push
-            git add pkgs/hellbun/default.nix
+            git add pkgs/hellbun/default.nix flake.nix
             git commit -m "Update hellbun to ${CIRCLE_TAG}" || echo "No changes to commit"
             git push https://${GITHUB_TOKEN}@github.com/z00b/nur-packages.git main
 
