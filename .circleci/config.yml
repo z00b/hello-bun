@@ -69,26 +69,26 @@ jobs:
             source ~/.bunenv
             # Run GoReleaser again with Nix-only config
             # This can now fetch from GitHub URLs to calculate proper hashes
-            goreleaser release --config .goreleaser.nix.yaml
+            goreleaser release --clean --config .goreleaser.nix.yaml
 
-      - run:
-          name: Add flake.nix to NUR
-          command: |
-            # Clone NUR packages repository
-            git clone git@github.com:z00b/nur-packages.git /tmp/nur-packages
-            cd /tmp/nur-packages
+      # - run:
+      #     name: Add flake.nix to NUR
+      #     command: |
+      #       # Clone NUR packages repository
+      #       git clone git@github.com:z00b/nur-packages.git /tmp/nur-packages
+      #       cd /tmp/nur-packages
 
-            # Configure git
-            git config user.name "z00b Bot"
-            git config user.email "rob@zuber.net"
+      #       # Configure git
+      #       git config user.name "z00b Bot"
+      #       git config user.email "rob@zuber.net"
 
-            # Copy flake.nix if it doesn't exist
-            if [ ! -f flake.nix ]; then
-              cp ~/project/flake.nix .
-              git add flake.nix
-              git commit -m "Add flake.nix for Nix Flakes support" || echo "No changes"
-              git push https://${GITHUB_TOKEN}@github.com/z00b/nur-packages.git main
-            fi
+      #       # Copy flake.nix if it doesn't exist
+      #       if [ ! -f flake.nix ]; then
+      #         cp ~/project/flake.nix .
+      #         git add flake.nix
+      #         git commit -m "Add flake.nix for Nix Flakes support" || echo "No changes"
+      #         git push https://${GITHUB_TOKEN}@github.com/z00b/nur-packages.git main
+      #       fi
 
 workflows:
   version: 2
