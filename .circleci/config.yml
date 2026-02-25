@@ -7,7 +7,7 @@ jobs:
   release:
     docker:
       # Use an image with both Bun and GoReleaser
-      - image: cimg/base:stable
+      - image: cimg/go:1.26.0
 
     resource_class: medium
 
