@@ -23,18 +23,19 @@ The CircleCI workflow triggers only when a version tag (matching `v*`) is pushed
 3. **Install Dependencies**: Runs `bun install` to get project dependencies
 4. **Install Flox**: Installs Flox (provides Nix tools)
 5. **Install GoReleaser**: Downloads GoReleaser v2.6.1
-6. **Run GoReleaser (Pass 1)**: Executes the main release (`.goreleaser.yaml`):
+6. **Run GoReleaser**: Executes the release process:
    - Builds binaries for all platforms
    - Creates archives and checksums
    - Generates Homebrew formula
+   - Generates Nix package template (locally)
    - Creates GitHub release with all assets
    - Publishes Homebrew formula to tap
 7. **Wait**: Sleeps for 15 seconds to allow GitHub to process the release
-8. **Run GoReleaser (Pass 2)**: Executes Nix-only config (`.goreleaser.nix.yaml`):
+8. **Publish Nix Package**: Manual step that:
    - Fetches release assets from GitHub to calculate proper SHA256 hashes
-   - Generates Nix package with correct hashes
-   - Publishes to NUR repository
-9. **Add flake.nix**: Copies flake.nix to NUR repository (first time only)
+   - Updates the Nix package template with correct hashes and versions
+   - Adds flake.nix for Nix Flakes support
+   - Commits and pushes to NUR repository
 
 ## Setup Instructions
 
