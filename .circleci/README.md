@@ -30,9 +30,8 @@ The CircleCI workflow triggers only when a version tag (matching `v*`) is pushed
    - Generates Nix package template (locally)
    - Creates GitHub release with all assets
    - Publishes Homebrew formula to tap
-7. **Wait**: Sleeps for 15 seconds to allow GitHub to process the release
-8. **Publish Nix Package**: Manual step that:
-   - Fetches release assets from GitHub to calculate proper SHA256 hashes
+7. **Publish Nix Package**: Manual step that:
+   - Calculates SHA256 hashes from local archives in `dist/`
    - Updates the Nix package template with correct hashes and versions
    - Adds flake.nix for Nix Flakes support
    - Commits and pushes to NUR repository

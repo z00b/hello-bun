@@ -39,16 +39,14 @@ brew install hellbun
 The CircleCI workflow automatically publishes to your NUR repository:
 
 1. **GoReleaser** generates a Nix package template with `skip_upload: true`
-2. **Wait 15 seconds** for GitHub to process the release
-3. **CircleCI step** that:
+2. **CircleCI step** that:
    - Copies the template from GoReleaser
-   - Fetches each release asset from GitHub
-   - Calculates proper SHA256 hashes using `nix-prefetch-url`
+   - Calculates proper SHA256 hashes from local archives using `nix-hash`
    - Updates the template with correct hashes and versions
    - Adds `flake.nix` for Nix Flakes support
    - Commits and pushes to NUR repository
 
-This approach avoids `nix-prefetch-url` timing issues by fetching from GitHub after the release is created.
+This approach is fast and reliable - no network fetching required since we hash the local archives that GoReleaser just built.
 
 ### Nix Flakes Support
 
