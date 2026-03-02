@@ -63,22 +63,21 @@ changelog:
       - Merge pull request
       - Merge branch
 
-# Homebrew formula
-brews:
+# Homebrew cask
+homebrew_casks:
   - name: hellbun
+    ids:
+      - default
+    binaries:
+      - hellbun
     repository:
       owner: z00b
       name: homebrew-tap
       # You'll need to create a GitHub repo called "homebrew-tap"
       # and give GoReleaser a token with repo write permissions
-    directory: Formula
+    directory: Casks
     homepage: https://github.com/z00b/hello-bun
     description: "A simple Hello, Bun! application"
-    license: "MIT"
-    test: |
-      system "#{bin}/hellbun"
-    install: |
-      bin.install "hellbun"
 
 # Nix package (for NUR - Nix User Repository)
 nix:
